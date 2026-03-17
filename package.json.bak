@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "whatsappy": "github:deveni0/ws",
-    "sharp": "github:deveni0/sharp-tmx",
+    "sharp": "github:deveni0/sharp-tmx"
     "cheerio": "1.0.0-rc.12",
     "chokidar": "^5.0.0",
     "file-type": "^18.0.0",
