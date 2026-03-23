@@ -4,26 +4,26 @@ import { group, access } from "./system/control.js";
 /* =========== client ======== */
 
 const client = new Client({
-  phoneNumber: '20123456789', // bot number 
+  phoneNumber: '201067999523', // bot number 
   info: { 
    nameBot: "Pomni AI", 
-   nameChannel: "𝐕𝐈𝐈7 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️", 
+   nameChannel: "black-afroto ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️", 
    idChannel: "120363225356834044@newsletter"
 },
   commandsPath: './plugins',
   prefix: [".", "/", "!"],
   owners: [
   // Owner 1
-      { name: "VA",
-      lid: "247579682029763@lid", jid: "201066826750@s.whatsapp.net" },
+      { name: "Afroto",
+      lid: "247579682029763@lid", jid: "201067999523@s.whatsapp.net" },
       
   // Owner 2
-      { name: "emam",
-       lid: "221307316789354@lid", jid: "201144480436@s.whatsapp.net" },
+      { name: "black",
+       lid: "221307316789354@lid", jid: "994407941269@s.whatsapp.net" },
        
   // Owner 3
-      { name: "Sukuna", 
-      jid: "201033024135@s.whatsapp.net", lid: "50414477168824@lid" }
+      { name: "كارثه بيه", 
+      jid: "212776030802@s.whatsapp.net", lid: "50414477168824@lid" }
   ],
   fromMe: false,
   showLogs: true,
