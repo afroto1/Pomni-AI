@@ -19,9 +19,9 @@ END:VCARD`;
     contextInfo: {
       forwardingScore: 2023,
       externalAdReply: {
-        title: '𝑇𝛨𝛯 𝛩𝑊𝛮𝛯𝑅',
+        title: '𝐓𝐄𝐀𝐌 𝐵𝛩𝑇 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 𝐁𝐋𝐀𝐂𝐊 🇪🇬',
         body: watermark,
-        sourceUrl: 'https://whatsapp.com/channel/0029Vb3UUKz3QxS3bgWmTc3x',
+        sourceUrl: 'https://whatsapp.com/channel/0029VacWb364dTnEKmVWd628',
         thumbnailUrl: img,
         mediaType: 1,
         showAdAttribution: true,
