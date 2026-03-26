@@ -1,5 +1,5 @@
 let handler = async (m, { conn, text }) => {
-  if (!text) throw '*أدخــل الـسـؤال !*'
+  if (!text) throw '*اسـالــنى يــبـــرو 💐 !*'
 
   let sender = m.sender
 
@@ -20,7 +20,7 @@ let handler = async (m, { conn, text }) => {
   let percent = Math.floor(Math.random() * 101)
 
   let msg = `
-*💫 اسآل بلاك 💫*
+*💫 اسآل بلاڪ 💫*
 
 *السؤال:* ${text}
 *الاجابة:* ${answer}
