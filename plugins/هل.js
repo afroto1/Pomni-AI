@@ -1,33 +1,33 @@
-let user = a => '@' + a.split('@')[0]
+let handler = async (m, { conn, text }) => {
+  if (!text) throw '*أدخــل الـسـؤال !*'
 
-export default async function handler(m, { groupMetadata, conn }) {
-  // يتأكد أن الرسالة تبدأ بـ "هل"
-  if (!m.text || !m.text.startsWith('هل')) return
-
-  let text = m.text.replace('هل', '').trim()
-  if (!text) return conn.reply(m.chat, '*أدخــل الـسـؤال !*', m)
-
-  // منشن صاحب الرسالة
   let sender = m.sender
 
-  // رد عشوائي
-  let answer = pickRandom([
+  // اختيار عشوائي مباشرة بدون دالة خارجية
+  let answers = [
     'احــتـمـال قـلـيـل',
     'نــعم بـالـتـأكـيد',
     'لا أعـتـقـد',
     'مــستـحـيــل',
     'غــالـبـاً نــعــم',
     'مــمـكـن'
-  ])
+  ]
 
-  // نسبة عشوائية
+  let answer = answers[Math.floor(Math.random() * answers.length)]
+
+  // نسبة مئوية
   let percent = Math.floor(Math.random() * 101)
 
-  let top = `*هــل ${text}*\n\n*الــأجــابـه :* ${answer}\n*الـنـسـبـة :* ${percent}%`
+  let msg = `*هــل ${text}*\n\n*الــأجــابـه :* ${answer}\n*الـنـسـبـة :* ${percent}%`
 
-  conn.reply(m.chat, top, m, { mentions: [sender] })
+  await conn.sendMessage(m.chat, {
+    text: msg,
+    mentions: [sender]
+  }, { quoted: m })
 }
 
-function pickRandom(list) {
-  return list[Math.floor(Math.random() * list.length)]
-}
+handler.command = /^هل$/i
+handler.group = true
+handler.tags = ['fun']
+
+export default handler
