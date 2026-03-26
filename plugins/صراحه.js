@@ -1,5 +1,5 @@
 let handler = async (m, { conn }) => {
-    m.reply(`*╔═══════════════════════════*\n➢ *"${pickRandom(global.bjssvjs)}"*\n*╚═══════════════════════════*`)
+    m.reply(`*𓅓 ⋅ ───━ •﹝👑﹞• ━─── ⋅ 𓅓*\n➢ *"${pickRandom(global.bjssvjs)}"*\n*𓅓 ⋅ ───━ •﹝👑﹞• ━─── ⋅ 𓅓*`)
 }
 
 handler.tags = ['fun']
