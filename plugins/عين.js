@@ -1,19 +1,15 @@
-import fs from 'fs';
 import axios from 'axios';
 
 let timeout = 60000;
 let poin = 500;
 
-let handler = async (m, { conn, usedPrefix }) => {
-    conn.tekateki = conn.tekateki ? conn.tekateki : {};
+async function handler(m, { conn }) {
+    if (!global.gameActive) global.gameActive = {};
 
-    let id = m.chat;
-    if (id in conn.tekateki) {
-        conn.reply(m.chat, `
-╮───────────────────────╭ـ
-│ *في سؤال لسه مجاوبتش عليه يا فاشل* ┃❌ ❯
-╯───────────────────────╰ـ`.trim(), conn.tekateki[id][0]);
-        throw false;
+    const oldGame = global.gameActive[m.chat];
+    if (oldGame) {
+        clearTimeout(oldGame.timeout);
+        delete global.gameActive[m.chat];
     }
 
     try {
@@ -21,48 +17,104 @@ let handler = async (m, { conn, usedPrefix }) => {
         const url = `https://drive.google.com/uc?export=download&id=${fileId}`;
         const res = await axios.get(url);
 
-        if (res.data && Array.isArray(res.data)) {
-            let tekateki = res.data;
-            let json = tekateki[Math.floor(Math.random() * tekateki.length)];
+        if (!res.data || !Array.isArray(res.data)) return;
 
-            let _clue = json.response;
-            let clue = _clue.replace(/[A-Za-z]/g, '_');
-            let img = json.image || 'https://telegra.ph/file/034daa6dcfb2270d7ff1c.jpg';
-            let answer = json.response;
-             let questions = json.question || 'من هو هذا ؟';
+        const data = res.data;
+        const random = data[Math.floor(Math.random() * data.length)];
 
+        const question = random.question || 'من هو هذا ؟';
+        const image = random.image || 'https://telegra.ph/file/034daa6dcfb2270d7ff1c.jpg';
+        const answer = random.response.toLowerCase();
 
-            let caption = `
+        const message = await conn.sendMessage(m.chat, {
+            image: { url: image },
+            caption: `
 ╮───────────────────────╭ـ
-│ ❓ *السـؤال : ${questions}*
-│ ⏳ *الـوقـت : ${(timeout / 1000).toFixed(2)}*
-│ 💰 *الـجـائـزة : ${poin} نقطه*
-│ 🏳️ *الانسـحاب : استخدم [انسحاب] للانسحاب من اللعبة*
-╯───────────────────────╰ـ`.trim();
+│ ❓ *السؤال : ${question}*
+│ ⏳ *الوقت : 60 ثانية*
+│ 💰 *الجائزة : ${poin} نقطة*
+╯───────────────────────╰ـ
+            `.trim()
+        });
 
-            conn.tekateki[id] = [
-                await conn.sendMessage(m.chat, { image: { url: img }, caption: caption }, { quoted: m }),
-                json, poin,
-                setTimeout(async () => {
-                    if (conn.tekateki[id]) await conn.reply(m.chat, `
+        global.gameActive[m.chat] = {
+            answer: answer,
+            image: image,
+            messageId: message?.key?.id,
+            timeout: setTimeout(() => {
+                if (global.gameActive[m.chat]) {
+                    const ans = global.gameActive[m.chat].answer;
+                    delete global.gameActive[m.chat];
+
+                    conn.sendMessage(m.chat, {
+                        text: `
 ╮───────────────────────╭ـ
-│ ❎ *خلص الوقت وانت زي منت فاشل مجوبتش*
-│ ✅ *الاجابه هي : ${answer}*
-╯───────────────────────╰ـ`.trim(), conn.tekateki[id][0]);
+│ ⏰ *انتهى الوقت*
+│ ✅ *الإجابة هي : ${ans}*
+╯───────────────────────╰ـ
+                        `.trim()
+                    }, { quoted: m });
+                }
+            }, timeout)
+        };
 
-                    delete conn.tekateki[id];
-                }, timeout)
-            ];
+    } catch (e) {
+        console.log(e);
+    }
+}
 
-        } else {
-            console.error('The received data is not a valid JSON array.');
-        }
-    } catch (error) {
-        console.error('Error fetching data from Google Drive:', error);
+handler.before = async (m, { conn }) => {
+    if (!m.quoted || !m.text) return false;
+
+    if (!global.gameActive) global.gameActive = {};
+
+    const game = global.gameActive[m.chat];
+    if (!game) return false;
+
+    if (m.quoted.id !== game.messageId) return false;
+
+    const userAnswer = m.text.toLowerCase().trim();
+
+    // انسحاب
+    if (userAnswer === 'انسحاب') {
+        clearTimeout(game.timeout);
+        delete global.gameActive[m.chat];
+
+        await conn.sendMessage(m.chat, {
+            text: `
+╮───────────────────────╭ـ
+│ 🚪 *تم الانسحاب من اللعبة*
+╯───────────────────────╰ـ
+            `.trim()
+        });
+        return true;
+    }
+
+    // إجابة صحيحة
+    if (userAnswer === game.answer) {
+        clearTimeout(game.timeout);
+        delete global.gameActive[m.chat];
+
+        await conn.sendMessage(m.chat, {
+            image: { url: game.image },
+            caption: `
+╮───────────────────────╭ـ
+│ 🎉 *إجابة صحيحة!*
+│ 💰 *كسبت ${poin} نقطة*
+╯───────────────────────╰ـ
+
+> اكتب *.عين* عشان تلعب تاني
+            `.trim()
+        });
+
+        return true;
+    } else {
+        await m.reply("❌ *إجابة غلط حاول تاني*");
+        return true;
     }
 };
 
-handler.help = ['acertijo'];
+handler.help = ['عين'];
 handler.tags = ['game'];
 handler.command = /^(عين)$/i;
 
