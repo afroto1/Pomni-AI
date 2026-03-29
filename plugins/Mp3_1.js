@@ -15,10 +15,7 @@ let handler = async (m, { conn }) => {
     )
 }
 
-// تشغيل تلقائي عند كتابة الكلمات
-handler.customPrefix = /^(بودعك|الوداع)$/i
-
-// مهم جداً للتشغيل التلقائي
-handler.before = true
+// الأمر يشتغل مباشرة بدون prefix
+handler.command = /^(بودعك|الوداع)$/i
 
 export default handler
