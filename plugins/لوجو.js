@@ -11,17 +11,18 @@ async function handler(m, { conn }) {
         const data = await res.json();
 
         if (!Array.isArray(data)) {
-            return m.reply("❌ خطأ في ملف الأسئلة");
+            return m.reply("❌ JSON غير صحيح");
         }
 
         const item = data[Math.floor(Math.random() * data.length)];
 
-        // دعم كل الاحتمالات
-        const image = item.image || item.img;
-        const answer = (item.response || item.name || item.answer || "").toLowerCase();
+        // استخراج القيم بأي شكل موجود
+        const image = item.image || item.img || item.logo || item.url;
+        const answer = (item.response || item.name || item.answer || item.title || "").toLowerCase().trim();
 
+        // لو فاضي نخطي السؤال ونجيب غيره
         if (!image || !answer) {
-            return m.reply("❌ البيانات داخل JSON غير متوافقة");
+            return m.reply("❌ فيه مشكلة في ملف الأسئلة (القيم ناقصة)");
         }
 
         const msg = await conn.sendMessage(m.chat, {
@@ -48,8 +49,8 @@ async function handler(m, { conn }) {
                     conn.sendMessage(m.chat, {
                         text: `
 ╮───────────────────────╭ـ
-│ ⏰ *انتهى الوقت*
-│ ✅ *الإجابة:* ${ans}
+│ ⏰ انتهى الوقت
+│ ✅ الإجابة: ${ans}
 ╯───────────────────────╰ـ
                         `.trim()
                     }, { quoted: m });
@@ -59,7 +60,7 @@ async function handler(m, { conn }) {
 
     } catch (e) {
         console.log(e);
-        m.reply("❌ فشل تحميل الأسئلة من الرابط");
+        m.reply("❌ فشل تحميل البيانات");
     }
 }
 
@@ -81,19 +82,19 @@ handler.before = async (m, { conn }) => {
             image: { url: game.image },
             caption: `
 ╮───────────────────────╭ـ
-│ 🎉 *إجابة صحيحة!*
-│ 💰 *+500 نقطة*
+│ 🎉 إجابة صحيحة!
+│ 💰 +500 نقطة
 ╯───────────────────────╰ـ
 
-> اكتب *لوجو* عشان تلعب تاني
+> اكتب لوجو للعب مرة أخرى
             `.trim()
         });
 
     } else {
         await m.reply(`
 ╮───────────────────────╭ـ
-│ ❌ *إجابة خاطئة*
-│ 🔁 *حاول مرة أخرى*
+│ ❌ إجابة خاطئة
+│ 🔁 حاول مرة أخرى
 ╯───────────────────────╰ـ
         `.trim());
     }
