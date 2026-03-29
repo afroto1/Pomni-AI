@@ -1,21 +1,20 @@
 import axios from 'axios';
 
-let timeout = 60000; // 60 ثانية
-let poin = 500; // نقاط اللعبة
+let TIMEOUT = 60000; // 60 ثانية
+let POINTS = 500;   // نقاط اللعبة
 
 async function handler(m, { conn }) {
     if (!global.logoGameActive) global.logoGameActive = {};
 
-    const oldGame = global.logoGameActive[m.chat];
-    if (oldGame) {
-        clearTimeout(oldGame.timeout);
+    // مسح أي لعبة سابقة
+    if (global.logoGameActive[m.chat]) {
+        clearTimeout(global.logoGameActive[m.chat].timeout);
         delete global.logoGameActive[m.chat];
     }
 
     try {
-        // ضع هنا معرّف الملف من Google Drive
-        const fileId = '1AbCdEfGhIjKlMnOpQrStUvWxYZ'; // استبدل بالمعرّف الخاص بك
-        const url = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        // رابط JSON مباشر
+        const url = 'https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/لوجو.json';
         const res = await axios.get(url);
         const data = res.data;
 
@@ -29,82 +28,61 @@ async function handler(m, { conn }) {
         const message = await conn.sendMessage(m.chat, {
             image: { url: image },
             caption: `
-╮───────────────────────╭ـ
-│ ❓ *السؤال : ${question}*
-│ ⏳ *الوقت : 60 ثانية*
-│ 💰 *الجائزة : ${poin} نقطة*
-╯───────────────────────╰ـ
+╭─━─━─━─━─━─╮
+❓ *السؤال:* ${question}
+⏳ *الوقت:* 60 ثانية
+💰 *الجائزة:* ${POINTS} نقطة
+╰─━─━─━─━─━─╯
             `.trim()
         });
 
+        // حفظ حالة اللعبة
         global.logoGameActive[m.chat] = {
-            answer: answer,
-            image: image,
+            answer,
+            image,
             messageId: message?.key?.id,
             timeout: setTimeout(() => {
                 if (global.logoGameActive[m.chat]) {
                     const ans = global.logoGameActive[m.chat].answer;
                     delete global.logoGameActive[m.chat];
-
                     conn.sendMessage(m.chat, {
-                        text: `
-╮───────────────────────╭ـ
-│ ⏰ *انتهى الوقت*
-│ ✅ *الإجابة هي : ${ans}*
-╯───────────────────────╰ـ
-                        `.trim()
+                        text: `⏰ انتهى الوقت!\n✅ الإجابة الصحيحة: ${ans}`
                     }, { quoted: m });
                 }
-            }, timeout)
+            }, TIMEOUT)
         };
 
     } catch (e) {
-        console.log(e);
+        console.log("❌ خطأ في تحميل JSON أو اللعبة:", e);
     }
 }
 
-handler.before = async (m, { conn }) => {
+// التعامل مع الإجابة
+handler.before = async (m) => {
     if (!m.quoted || !m.text) return false;
 
     const game = global.logoGameActive[m.chat];
-    if (!game) return false;
-    if (m.quoted.id !== game.messageId) return false;
+    if (!game || m.quoted.id !== game.messageId) return false;
 
     const userAnswer = m.text.toLowerCase().trim();
 
     if (userAnswer === 'انسحاب') {
         clearTimeout(game.timeout);
         delete global.logoGameActive[m.chat];
-
-        await conn.sendMessage(m.chat, {
-            text: `
-╮───────────────────────╭ـ
-│ 🚪 *تم الانسحاب من اللعبة*
-╯───────────────────────╰ـ
-            `.trim()
-        });
+        await m.reply("🚪 تم الانسحاب من اللعبة");
         return true;
     }
 
     if (userAnswer === game.answer) {
         clearTimeout(game.timeout);
         delete global.logoGameActive[m.chat];
-
         await conn.sendMessage(m.chat, {
             image: { url: game.image },
-            caption: `
-╮───────────────────────╭ـ
-│ 🎉 *إجابة صحيحة!*
-│ 💰 *كسبت ${poin} نقطة*
-╯───────────────────────╰ـ
-
-> اكتب *لوجو* عشان تلعب تاني
-            `.trim()
+            caption: `🎉 إجابة صحيحة!\n💰 كسبت ${POINTS} نقطة\n> اكتب *لوجو* لتلعب مرة أخرى`
         });
-
         return true;
     } else {
-        await m.reply("❌ *إجابة غلط حاول تاني*");
+        await m.reply("❌ إجابة خاطئة، حاول مرة أخرى");
         return true;
     }
 };
