@@ -1,4 +1,4 @@
-import axios from 'axios';
+import fetch from 'node-fetch';
 
 let timeout = 60000;
 let poin = 4999;
@@ -6,7 +6,6 @@ let poin = 4999;
 async function handler(m, { conn }) {
     if (!global.gameActive) global.gameActive = {};
 
-    // إنهاء أي لعبة قديمة في نفس الشات
     const oldGame = global.gameActive[m.chat];
     if (oldGame) {
         clearTimeout(oldGame.timeout);
@@ -14,10 +13,17 @@ async function handler(m, { conn }) {
     }
 
     try {
-        const res = await axios.get('https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/لوجو.json');
-        const data = res.data;
+        const res = await fetch('https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/لوجو.json');
 
-        if (!Array.isArray(data)) return;
+        if (!res.ok) throw new Error('fetch failed');
+
+        const text = await res.text();
+        const json = JSON.parse(text);
+
+        // دعم أكثر من شكل للبيانات
+        const data = Array.isArray(json) ? json : json.data;
+
+        if (!Array.isArray(data)) throw new Error('invalid data format');
 
         const random = data[Math.floor(Math.random() * data.length)];
 
@@ -38,8 +44,8 @@ async function handler(m, { conn }) {
         });
 
         global.gameActive[m.chat] = {
-            answer: answer,
-            image: image,
+            answer,
+            image,
             messageId: message?.key?.id,
             timeout: setTimeout(() => {
                 if (global.gameActive[m.chat]) {
@@ -71,7 +77,6 @@ handler.before = async (m, { conn }) => {
     const game = global.gameActive[m.chat];
     if (!game) return false;
 
-    // نتحقق من نفس الرسالة (reply) أو أي رسالة داخل الشات
     if (!m.quoted || m.quoted.id !== game.messageId) return false;
 
     const userAnswer = m.text.toLowerCase().trim();
@@ -88,6 +93,7 @@ handler.before = async (m, { conn }) => {
 ╯───────────────────────╰ـ
             `.trim()
         });
+
         return true;
     }
 
@@ -103,8 +109,6 @@ handler.before = async (m, { conn }) => {
 │ 🎉 *إجابة صحيحة!*
 │ 💰 *كسبت ${poin} XP*
 ╯───────────────────────╰ـ
-
-> اكتب *.لوجو* للعب مرة أخرى
             `.trim()
         });
 
