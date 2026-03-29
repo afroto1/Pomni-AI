@@ -7,35 +7,44 @@ async function handler(m, { conn }) {
     }
 
     try {
-        // قائمة التطبيقات مع صور Base64
         const data = [
-            {
-                name: "facebook",
-                img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..." // اختصر Base64 هنا
-            },
-            {
-                name: "instagram",
-                img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
-            },
-            {
-                name: "whatsapp",
-                img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
-            },
-            {
-                name: "twitter",
-                img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
-            },
-            {
-                name: "snapchat",
-                img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
-            }
+            { name: "facebook", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "instagram", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "whatsapp", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "twitter", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "snapchat", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "linkedin", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "tiktok", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "youtube", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "google", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "spotify", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "amazon", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "paypal", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "netflix", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "airbnb", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "uber", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "discord", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "reddit", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "shazam", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "telegram", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "pinterest", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "twitch", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "skype", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "viber", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "soundcloud", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "snapseed", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "evernote", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "skyscanner", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "tripadvisor", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "zoom", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "quora", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." },
+            { name: "slack", img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAF..." }
         ];
 
         const item = data[Math.floor(Math.random() * data.length)];
 
-        // ارسال السؤال
         const msg = await conn.sendMessage(m.chat, {
-            image: { url: item.img }, // Base64 مباشرة
+            image: { url: item.img },
             caption: `
 ╮───────────────────────╭ـ
 │ ❓ ما اسم هذا التطبيق؟
@@ -46,24 +55,15 @@ async function handler(m, { conn }) {
             `.trim()
         });
 
-        // حفظ اللعبة الحالية
         global.gameActive[m.chat] = {
             answer: item.name,
             image: item.img,
             messageId: msg.key.id,
             timeout: setTimeout(() => {
                 if (global.gameActive[m.chat]) {
-                    let ans = global.gameActive[m.chat].answer;
+                    const ans = global.gameActive[m.chat].answer;
                     delete global.gameActive[m.chat];
-
-                    conn.sendMessage(m.chat, {
-                        text: `
-╮───────────────────────╭ـ
-│ ⏰ انتهى الوقت
-│ ✅ الإجابة: ${ans}
-╯───────────────────────╰ـ
-                        `.trim()
-                    }, { quoted: m });
+                    conn.sendMessage(m.chat, { text: `⏰ انتهى الوقت\n✅ الإجابة: ${ans}` }, { quoted: m });
                 }
             }, 30000)
         };
@@ -74,10 +74,8 @@ async function handler(m, { conn }) {
     }
 }
 
-// التحقق من الإجابة
 handler.before = async (m) => {
     if (!m.text) return false;
-
     const game = global.gameActive?.[m.chat];
     if (!game) return false;
 
