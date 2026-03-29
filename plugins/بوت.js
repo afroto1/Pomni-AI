@@ -1,98 +1,69 @@
-import cheerio from 'cheerio';
-import fetch from 'node-fetch';
-let handler = async (m, {
-    conn,
-    args,
-    usedPrefix,
-    text,
-    command
-}) => {
-if (!text) return m.reply("مرحبا بك فى بوت بلاك و عفرتو \nمثال\n │❏ بوت من نيكولا تسلا \n │❏ بوت افضل انمى \n │❏ بوت هات فزورة أو لغز ")
-await m.reply(wait)
-try {
-// Contoh penggunaan
-let result = await CleanDx(text)
-await m.reply(result)
-} catch (e) {
-await m.reply('وقعت مشكلة :(')
+import fetch from 'node-fetch'
+
+let handler = async (m, { conn, text }) => {
+
+  if (!text) return m.reply(`
+╮───────────────────────╭ـ
+مرحبا بك فى بوت بلاك 🤖
+
+مثال:
+│❏ بوت من نيكولا تسلا
+│❏ بوت افضل انمى
+│❏ بوت هات فزورة أو لغز
+╰───────────────────────╯
+`)
+
+  await m.reply(wait)
+
+  try {
+    let result = await askAI(text)
+
+    await m.reply(`
+╮───────────────────────╭ـ
+${result}
+╰───────────────────────╯
+`)
+  } catch (e) {
+    console.log(e)
+    await m.reply('وقعت مشكلة مع الذكاء الاصطناعي 😢')
+  }
 }
-}
+
 handler.help = ["بوت"]
 handler.tags = ["ai"]
 handler.command = /^(بوت)$/i
+
 export default handler
 
-/* New Line */
-async function CleanDx(your_qus) {
-  let linkaiList = [];
-  let linkaiId = generateRandomString(21);
-  let Baseurl = "https://vipcleandx.xyz/";
+/* ================== AI FUNCTION ================== */
 
-  console.log(formatTime());
-  linkaiList.push({
-    "content": your_qus,
-    "role": "user",
-    "nickname": "",
-    "time": formatTime(),
-    "isMe": true
-  });
-  linkaiList.push({
-    "content": "正在思考中...",
-    "role": "assistant",
-    "nickname": "AI",
-    "time": formatTime(),
-    "isMe": false
-  });
-  if (linkaiList.length > 10) {
-    linkaiList = linkaiList.shift();
-  }
+async function askAI(text) {
 
- let response = await fetch(Baseurl + "v1/chat/gpt/", {
+  const API_KEY = "ضع_مفتاحك_هنا" // 👈 ضع مفتاحك هنا
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Forwarded-For": generateRandomIP(),
-      "Referer": Baseurl,
-      "accept": "application/json, text/plain, */*"
+      "Authorization": `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      "list": linkaiList,
-      "id": linkaiId,
-      "title": your_qus,
-      "prompt": "",
-      "temperature": 0.5,
-      "models": "0",
-      "continuous": true
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "أنت بوت عربي ذكي اسمه بوت بلاك، ترد بشكل احترافي ومختصر وواضح مع الحفاظ على الزخرفة."
+        },
+        {
+          role: "user",
+          content: text
+        }
+      ],
+      temperature: 0.7
     })
   })
-  const data = await response.text();
 
-    return data;
-}
+  const data = await response.json()
 
-function generateRandomString(length) {
-  const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let randomString = '';
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    randomString += characters.charAt(randomIndex);
-  }
-  return randomString;
-}
-
-function generateRandomIP() {
-  const ipParts = [];
-  for (let i = 0; i < 4; i++) {
-    const randomPart = Math.floor(Math.random() * 256);
-    ipParts.push(randomPart);
-  }
-  return ipParts.join('.');
-}
-
-function formatTime() {
-  const currentDate = new Date();
-  const hours = currentDate.getHours().toString().padStart(2, '0');
-  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-  return `${hours}:${minutes}:${seconds}`;
+  return data?.choices?.[0]?.message?.content || "لم أستطع توليد رد."
 }
