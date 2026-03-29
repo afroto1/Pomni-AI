@@ -2,7 +2,6 @@ import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text }) => {
 
-  // رسالة عند عدم إدخال نص
   if (!text) return m.reply(`
 ╮───────────────────────╭ـ
 مرحبا بك فى بوت بلاك 🤖
@@ -16,11 +15,11 @@ let handler = async (m, { conn, text }) => {
 
   await m.reply(wait)
 
-  let sender = m.sender
-
   try {
 
     let aiAnswer = await askAI(text)
+
+    if (!aiAnswer) throw new Error("Empty AI response")
 
     let percent = Math.floor(Math.random() * 101)
 
@@ -28,12 +27,12 @@ let handler = async (m, { conn, text }) => {
 
     await conn.sendMessage(m.chat, {
       text: msg,
-      mentions: [sender]
+      mentions: [m.sender]
     }, { quoted: m })
 
   } catch (e) {
-    console.log(e)
-    m.reply('❌ حدث خطأ في الذكاء الاصطناعي')
+    console.log("ERROR:", e)
+    m.reply("❌ فشل في جلب الرد من الذكاء الاصطناعي")
   }
 }
 
@@ -43,60 +42,57 @@ handler.tags = ['fun']
 
 export default handler
 
-/* ================== AI FUNCTION ================== */
+/* ================== AI ================== */
 
 async function askAI(question) {
 
-  let linkaiList = []
-  let linkaiId = generateRandomString(21)
   let Baseurl = "https://vipcleandx.xyz/"
 
-  linkaiList.push({
-    content: `أجب فقط بكلمة واحدة (نعم أو لا أو ربما) على السؤال:\n${question}`,
-    role: "user",
-    time: formatTime(),
-    isMe: true
-  })
+  let payload = {
+    list: [
+      {
+        content: `أجب بكلمة واحدة فقط (نعم أو لا أو ربما): ${question}`,
+        role: "user",
+        time: formatTime(),
+        isMe: true
+      }
+    ],
+    id: generateRandomString(21),
+    title: question,
+    prompt: "",
+    temperature: 0.5,
+    models: "0",
+    continuous: true
+  }
 
-  linkaiList.push({
-    content: "thinking...",
-    role: "assistant",
-    time: formatTime(),
-    isMe: false
-  })
-
-  let response = await fetch(Baseurl + "v1/chat/gpt/", {
+  let res = await fetch(Baseurl + "v1/chat/gpt/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Forwarded-For": generateRandomIP(),
-      "Referer": Baseurl,
-      "accept": "application/json"
+      "Referer": Baseurl
     },
-    body: JSON.stringify({
-      list: linkaiList,
-      id: linkaiId,
-      title: question,
-      prompt: "Answer briefly.",
-      temperature: 0.5,
-      models: "0",
-      continuous: true
-    })
+    body: JSON.stringify(payload)
   })
 
-  let data = await response.text()
+  let data = await res.text()
+
+  console.log("RAW API RESPONSE:", data)
 
   try {
     let json = JSON.parse(data)
 
-    let result = json?.data || json?.message || json?.content
+    // محاولة استخراج الرد بأكثر من شكل
+    let result =
+      json?.data ||
+      json?.message ||
+      json?.content ||
+      json?.result
 
-    if (!result) return "لا أعلم"
+    return result || "لا يوجد رد من الـ API"
 
-    return result
-
-  } catch {
-    return data || "لا أعلم"
+  } catch (err) {
+    console.log("PARSE ERROR:", err)
+    return data || "خطأ في تحليل الرد"
   }
 }
 
@@ -109,10 +105,6 @@ function generateRandomString(length) {
     result += chars[Math.floor(Math.random() * chars.length)]
   }
   return result
-}
-
-function generateRandomIP() {
-  return Array.from({ length: 4 }, () => Math.floor(Math.random() * 256)).join('.')
 }
 
 function formatTime() {
