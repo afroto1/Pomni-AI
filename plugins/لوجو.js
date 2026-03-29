@@ -1,3 +1,4 @@
+// كود لعبة لوجو جاهز 30 تطبيق
 async function handler(m, { conn }) {
     if (!global.gameActive) global.gameActive = {};
 
@@ -8,39 +9,37 @@ async function handler(m, { conn }) {
     }
 
     try {
-        // بيانات التطبيقات مع روابط صور مباشرة داخل الكود
+        // بيانات التطبيقات + روابط صور مباشرة
         const data = [
-            { name: "facebook", img: "https://i.postimg.cc/3xT6QZ3P/facebook.jpg" },
-            { name: "instagram", img: "https://i.postimg.cc/GtjyWf97/instagram.jpg" },
-            { name: "whatsapp", img: "https://i.postimg.cc/t4gZQWxk/whatsapp.jpg" },
-            { name: "twitter", img: "https://i.postimg.cc/qqZYXbWx/twitter.jpg" },
-            { name: "snapchat", img: "https://i.postimg.cc/C1vp2m73/snapchat.jpg" },
-            { name: "linkedin", img: "https://i.postimg.cc/QC1J4S8p/linkedin.jpg" },
-            { name: "tiktok", img: "https://i.postimg.cc/t4VY7gWd/tiktok.jpg" },
-            { name: "youtube", img: "https://i.postimg.cc/ZqZ2tL8P/youtube.jpg" },
-            { name: "google", img: "https://i.postimg.cc/63p3WTYm/google.jpg" },
-            { name: "spotify", img: "https://i.postimg.cc/Nf2X6m1t/spotify.jpg" },
-            { name: "amazon", img: "https://i.postimg.cc/65mD9k98/amazon.jpg" },
-            { name: "paypal", img: "https://i.postimg.cc/1tqd4bGc/paypal.jpg" },
-            { name: "netflix", img: "https://i.postimg.cc/7YcSdXxx/netflix.jpg" },
-            { name: "airbnb", img: "https://i.postimg.cc/3RLC13CH/airbnb.jpg" },
-            { name: "uber", img: "https://i.postimg.cc/26m7H7qY/uber.jpg" },
-            { name: "discord", img: "https://i.postimg.cc/SN5G8mXy/discord.jpg" },
-            { name: "reddit", img: "https://i.postimg.cc/6pg2P6hp/reddit.jpg" },
-            { name: "shazam", img: "https://i.postimg.cc/rmMgJQdV/shazam.jpg" },
-            { name: "telegram", img: "https://i.postimg.cc/0jvC9G8f/telegram.jpg" },
-            { name: "pinterest", img: "https://i.postimg.cc/j2j9mB0H/pinterest.jpg" },
-            { name: "twitch", img: "https://i.postimg.cc/5yK0k0VX/twitch.jpg" },
-            { name: "skype", img: "https://i.postimg.cc/zX2dg1Hk/skype.jpg" },
-            { name: "viber", img: "https://i.postimg.cc/hGNQbYhC/viber.jpg" },
-            { name: "soundcloud", img: "https://i.postimg.cc/3R9gq0s9/soundcloud.jpg" },
-            { name: "slack", img: "https://i.postimg.cc/pXV9gMT2/slack.jpg" },
-            { name: "zoom", img: "https://i.postimg.cc/V6n12m7M/zoom.jpg" },
-            { name: "quora", img: "https://i.postimg.cc/0y7xV8PC/quora.jpg" },
-            { name: "messenger", img: "https://i.postimg.cc/qsx23qC2/messenger.jpg" },
-            { name: "wechat", img: "https://i.postimg.cc/bN0Wn4Rm/wechat.jpg" },
-            { name: "yahoo", img: "https://i.postimg.cc/9QWGqyrj/yahoo.jpg" },
-            { name: "tumblr", img: "https://i.postimg.cc/vmVhDRL7/tumblr.jpg" }
+          { "name": "facebook", "img": "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" },
+          { "name": "instagram", "img": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.png" },
+          { "name": "whatsapp", "img": "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp_Logo.png" },
+          { "name": "youtube", "img": "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.png" },
+          { "name": "twitter", "img": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Twitter_Logo_2012.png" },
+          { "name": "tiktok", "img": "https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.png" },
+          { "name": "snapchat", "img": "https://upload.wikimedia.org/wikipedia/en/a/ad/Snapchat_logo.png" },
+          { "name": "telegram", "img": "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.png" },
+          { "name": "linkedin", "img": "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" },
+          { "name": "pinterest", "img": "https://upload.wikimedia.org/wikipedia/commons/3/35/Pinterest_logo.png" },
+          { "name": "spotify", "img": "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.png" },
+          { "name": "netflix", "img": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.png" },
+          { "name": "amazon", "img": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.png" },
+          { "name": "paypal", "img": "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg.png" },
+          { "name": "discord", "img": "https://upload.wikimedia.org/wikipedia/commons/8/88/Discord_logo.png" },
+          { "name": "reddit", "img": "https://upload.wikimedia.org/wikipedia/en/5/58/Reddit_logo_new.png" },
+          { "name": "skype", "img": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Skype_icon_2021.png" },
+          { "name": "viber", "img": "https://upload.wikimedia.org/wikipedia/commons/4/45/Viber_logo.png" },
+          { "name": "slack", "img": "https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png" },
+          { "name": "zoom", "img": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Zoom_Communications_Logo.png" },
+          { "name": "google", "img": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.png" },
+          { "name": "apple", "img": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.png" },
+          { "name": "github", "img": "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.png" },
+          { "name": "twitch", "img": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Twitch_logo_2019.png" },
+          { "name": "ebay", "img": "https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.png" },
+          { "name": "wechat", "img": "https://upload.wikimedia.org/wikipedia/commons/7/79/WeChat_Logo.png" },
+          { "name": "messenger", "img": "https://upload.wikimedia.org/wikipedia/commons/8/83/Facebook_Messenger_logo_2020.png" },
+          { "name": "quora", "img": "https://upload.wikimedia.org/wikipedia/commons/3/32/Quora_logo_2015.png" },
+          { "name": "tripadvisor", "img": "https://upload.wikimedia.org/wikipedia/commons/0/07/Tripadvisor_logo.png" }
         ];
 
         const item = data[Math.floor(Math.random() * data.length)];
@@ -57,7 +56,6 @@ async function handler(m, { conn }) {
             `.trim()
         });
 
-        // حفظ حالة اللعبة
         global.gameActive[m.chat] = {
             answer: item.name.toLowerCase(),
             image: item.img,
