@@ -3,15 +3,13 @@ import axios from 'axios';
 async function handler(m, { conn }) {
     if (!global.gameActive) global.gameActive = {};
     
-    // إنهاء اللعبة القديمة
     if (global.gameActive[m.chat]) {
         clearTimeout(global.gameActive[m.chat].timeout);
         delete global.gameActive[m.chat];
     }
 
     try {
-        // رابط JSON
-        const res = await axios.get('https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/لوجو.json');
+        const res = await axios.get('https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/logo.json');
         const data = res.data;
 
         if (!Array.isArray(data)) {
@@ -19,13 +17,7 @@ async function handler(m, { conn }) {
         }
 
         const item = data[Math.floor(Math.random() * data.length)];
-
-        // دعم response أو answer
-        const answer = (item.response || item.answer || "").toLowerCase();
-
-        if (!answer || !item.image) {
-            return m.reply("❌ سؤال غير صالح في JSON");
-        }
+        const answer = (item.response || item.answer).toLowerCase();
 
         const msg = await conn.sendMessage(m.chat, {
             image: { url: item.image },
@@ -62,7 +54,7 @@ async function handler(m, { conn }) {
 
     } catch (e) {
         console.log(e);
-        m.reply("❌ فشل تحميل الأسئلة من الرابط");
+        m.reply("❌ فشل تحميل الأسئلة");
     }
 }
 
