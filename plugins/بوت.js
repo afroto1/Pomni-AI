@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text }) => {
 
-  if (!text) return m.reply(`
+  if (!text) throw `
 ╮───────────────────────╭ـ
 مرحبا بك فى بوت بلاك 🤖
 
@@ -11,7 +11,7 @@ let handler = async (m, { conn, text }) => {
 │❏ بوت افضل انمى
 │❏ بوت هات فزورة أو لغز
 ╰───────────────────────╯
-`)
+`
 
   let sender = m.sender
 
@@ -31,18 +31,20 @@ let handler = async (m, { conn, text }) => {
 
     let aiAnswer = data?.message || "لا يوجد رد"
 
-    await conn.sendMessage(m.chat, {
-      text: `
+    let msg = `
 ╮───────────────────────╭ـ
 ${aiAnswer}
 ╰───────────────────────╯
-`,
+`
+
+    await conn.sendMessage(m.chat, {
+      text: msg,
       mentions: [sender]
     }, { quoted: m })
 
   } catch (e) {
     console.log(e)
-    m.reply('❌ حدث خطأ في الذكاء الاصطناعي')
+    throw '❌ حدث خطأ في الذكاء الاصطناعي'
   }
 }
 
