@@ -13,16 +13,15 @@ async function handler(m, { conn }) {
     }
 
     try {
-        // هنا نستبدل الرابط بمصادر اللوجوهات (يمكنك تعديلها حسب الحاجة)
-        const logos = [
-            { question: "ما اسم هذا التطبيق؟", image: "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png", response: "فيسبوك" },
-            { question: "ما اسم هذا التطبيق؟", image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", response: "واتساب" },
-            { question: "ما اسم هذا التطبيق؟", image: "https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png", response: "يوتيوب" },
-            { question: "ما اسم هذا التطبيق؟", image: "https://upload.wikimedia.org/wikipedia/commons/a/ad/Snapchat_logo.svg", response: "سناب شات" }
-        ];
+        // ضع هنا معرّف الملف من Google Drive
+        const fileId = '1AbCdEfGhIjKlMnOpQrStUvWxYZ'; // استبدل بالمعرّف الخاص بك
+        const url = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        const res = await axios.get(url);
+        const data = res.data;
 
-        const random = logos[Math.floor(Math.random() * logos.length)];
+        if (!Array.isArray(data) || data.length === 0) return;
 
+        const random = data[Math.floor(Math.random() * data.length)];
         const question = random.question;
         const image = random.image;
         const answer = random.response.toLowerCase();
@@ -64,20 +63,15 @@ async function handler(m, { conn }) {
     }
 }
 
-// التحقق من الإجابة
 handler.before = async (m, { conn }) => {
     if (!m.quoted || !m.text) return false;
 
-    if (!global.logoGameActive) global.logoGameActive = {};
-
     const game = global.logoGameActive[m.chat];
     if (!game) return false;
-
     if (m.quoted.id !== game.messageId) return false;
 
     const userAnswer = m.text.toLowerCase().trim();
 
-    // انسحاب
     if (userAnswer === 'انسحاب') {
         clearTimeout(game.timeout);
         delete global.logoGameActive[m.chat];
@@ -92,7 +86,6 @@ handler.before = async (m, { conn }) => {
         return true;
     }
 
-    // إجابة صحيحة
     if (userAnswer === game.answer) {
         clearTimeout(game.timeout);
         delete global.logoGameActive[m.chat];
