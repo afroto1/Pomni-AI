@@ -1,162 +1,44 @@
 [
-  {
-    "name": "facebook",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "instagram",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "whatsapp",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "telegram",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "twitter",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "snapchat",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "tiktok",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "youtube",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "gmail",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "google",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "maps",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "drive",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "chrome",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "playstore",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "netflix",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "spotify",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "linkedin",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "pinterest",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "reddit",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "discord",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "zoom",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "skype",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "messenger",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "viber",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "uber",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "lyft",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "airbnb",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "paypal",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "amazon",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "aliexpress",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "ebay",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "dropbox",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "twitch",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "github",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "gitlab",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "stackoverflow",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "notion",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "slack",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "figma",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  },
-  {
-    "name": "opera",
-    "img": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB"
-  }
+  { "name": "facebook", "img": "data:image/png;base64,BASE64_FACEBOOK" },
+  { "name": "instagram", "img": "data:image/png;base64,BASE64_INSTAGRAM" },
+  { "name": "whatsapp", "img": "data:image/png;base64,BASE64_WHATSAPP" },
+  { "name": "telegram", "img": "data:image/png;base64,BASE64_TELEGRAM" },
+  { "name": "twitter", "img": "data:image/png;base64,BASE64_TWITTER" },
+  { "name": "snapchat", "img": "data:image/png;base64,BASE64_SNAPCHAT" },
+  { "name": "tiktok", "img": "data:image/png;base64,BASE64_TIKTOK" },
+  { "name": "youtube", "img": "data:image/png;base64,BASE64_YOUTUBE" },
+  { "name": "gmail", "img": "data:image/png;base64,BASE64_GMAIL" },
+  { "name": "google", "img": "data:image/png;base64,BASE64_GOOGLE" },
+
+  { "name": "maps", "img": "data:image/png;base64,BASE64_MAPS" },
+  { "name": "drive", "img": "data:image/png;base64,BASE64_DRIVE" },
+  { "name": "chrome", "img": "data:image/png;base64,BASE64_CHROME" },
+  { "name": "playstore", "img": "data:image/png;base64,BASE64_PLAYSTORE" },
+  { "name": "netflix", "img": "data:image/png;base64,BASE64_NETFLIX" },
+  { "name": "spotify", "img": "data:image/png;base64,BASE64_SPOTIFY" },
+  { "name": "linkedin", "img": "data:image/png;base64,BASE64_LINKEDIN" },
+  { "name": "pinterest", "img": "data:image/png;base64,BASE64_PINTEREST" },
+  { "name": "reddit", "img": "data:image/png;base64,BASE64_REDDIT" },
+  { "name": "discord", "img": "data:image/png;base64,BASE64_DISCORD" },
+
+  { "name": "zoom", "img": "data:image/png;base64,BASE64_ZOOM" },
+  { "name": "skype", "img": "data:image/png;base64,BASE64_SKYPE" },
+  { "name": "messenger", "img": "data:image/png;base64,BASE64_MESSENGER" },
+  { "name": "viber", "img": "data:image/png;base64,BASE64_VIBER" },
+  { "name": "uber", "img": "data:image/png;base64,BASE64_UBER" },
+  { "name": "airbnb", "img": "data:image/png;base64,BASE64_AIRBNB" },
+  { "name": "paypal", "img": "data:image/png;base64,BASE64_PAYPAL" },
+  { "name": "amazon", "img": "data:image/png;base64,BASE64_AMAZON" },
+  { "name": "aliexpress", "img": "data:image/png;base64,BASE64_ALIEXPRESS" },
+  { "name": "ebay", "img": "data:image/png;base64,BASE64_EBAY" },
+
+  { "name": "dropbox", "img": "data:image/png;base64,BASE64_DROPBOX" },
+  { "name": "twitch", "img": "data:image/png;base64,BASE64_TWITCH" },
+  { "name": "github", "img": "data:image/png;base64,BASE64_GITHUB" },
+  { "name": "gitlab", "img": "data:image/png;base64,BASE64_GITLAB" },
+  { "name": "stackoverflow", "img": "data:image/png;base64,BASE64_STACKOVERFLOW" },
+  { "name": "notion", "img": "data:image/png;base64,BASE64_NOTION" },
+  { "name": "slack", "img": "data:image/png;base64,BASE64_SLACK" },
+  { "name": "figma", "img": "data:image/png;base64,BASE64_FIGMA" },
+  { "name": "opera", "img": "data:image/png;base64,BASE64_OPERA" }
 ]
