@@ -8,46 +8,48 @@ async function handler(m, { conn }) {
 
     try {
         const data = [
-            {
-                name: "whatsapp",
-                img: "https://play-lh.googleusercontent.com/8A9Gd4P9zPp2Y7G2dXlV7Qv4z4v1iZ9X1N8f8Z5G3P5Gk5G3P5G=s512"
-            },
-            {
-                name: "facebook",
-                img: "https://play-lh.googleusercontent.com/Zj7v1Q5V7d7YQ5n1Z1X7Z5V1Z1X7Z5V=s512"
-            },
-            {
-                name: "instagram",
-                img: "https://play-lh.googleusercontent.com/VRMWdJ6fX5U6d5V5Y7V5Y7V5Y7V=s512"
-            },
-            {
-                name: "youtube",
-                img: "https://play-lh.googleusercontent.com/youtube_icon=s512"
-            },
-            {
-                name: "tiktok",
-                img: "https://play-lh.googleusercontent.com/tiktok_icon=s512"
-            },
-            {
-                name: "telegram",
-                img: "https://play-lh.googleusercontent.com/telegram_icon=s512"
-            },
-            {
-                name: "snapchat",
-                img: "https://play-lh.googleusercontent.com/snapchat_icon=s512"
-            },
-            {
-                name: "spotify",
-                img: "https://play-lh.googleusercontent.com/spotify_icon=s512"
-            },
-            {
-                name: "netflix",
-                img: "https://play-lh.googleusercontent.com/netflix_icon=s512"
-            },
-            {
-                name: "amazon",
-                img: "https://play-lh.googleusercontent.com/amazon_icon=s512"
-            }
+            { name: "facebook", img: "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" },
+            { name: "instagram", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.png" },
+            { name: "whatsapp", img: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" },
+            { name: "youtube", img: "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" },
+            { name: "twitter", img: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" },
+            { name: "tiktok", img: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" },
+            { name: "snapchat", img: "https://upload.wikimedia.org/wikipedia/en/a/ad/Snapchat_logo.svg" },
+            { name: "telegram", img: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" },
+            { name: "linkedin", img: "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" },
+            { name: "pinterest", img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png" },
+            { name: "spotify", img: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" },
+            { name: "netflix", img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" },
+            { name: "amazon", img: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
+            { name: "paypal", img: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" },
+            { name: "discord", img: "https://upload.wikimedia.org/wikipedia/commons/8/88/Discord_logo.svg" },
+            { name: "reddit", img: "https://upload.wikimedia.org/wikipedia/en/5/58/Reddit_logo_new.svg" },
+            { name: "skype", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Skype_icon_2021.svg" },
+            { name: "viber", img: "https://upload.wikimedia.org/wikipedia/commons/4/45/Viber_logo.svg" },
+            { name: "slack", img: "https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png" },
+            { name: "zoom", img: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg" },
+            { name: "google", img: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
+            { name: "apple", img: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" },
+            { name: "github", img: "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" },
+            { name: "twitch", img: "https://upload.wikimedia.org/wikipedia/commons/2/26/Twitch_logo.svg" },
+            { name: "ebay", img: "https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg" },
+            { name: "wechat", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/WeChat_Logo.svg" },
+            { name: "messenger", img: "https://upload.wikimedia.org/wikipedia/commons/8/83/Facebook_Messenger_logo_2020.svg" },
+            { name: "quora", img: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Quora_logo_2015.svg" },
+            { name: "tripadvisor", img: "https://upload.wikimedia.org/wikipedia/commons/0/07/Tripadvisor_logo.svg" },
+            { name: "uber", img: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.svg" },
+
+            // 🔥 إضافات جديدة
+            { name: "airbnb", img: "https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_Bélo.svg" },
+            { name: "nike", img: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" },
+            { name: "adidas", img: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg" },
+            { name: "samsung", img: "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" },
+            { name: "xiaomi", img: "https://upload.wikimedia.org/wikipedia/commons/2/29/Xiaomi_logo.svg" },
+            { name: "oppo", img: "https://upload.wikimedia.org/wikipedia/commons/0/0f/OPPO_LOGO_2019.svg" },
+            { name: "huawei", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/Huawei_Logo.svg" },
+            { name: "lenovo", img: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Lenovo_logo_2015.svg" },
+            { name: "dell", img: "https://upload.wikimedia.org/wikipedia/commons/4/48/Dell_Logo.svg" },
+            { name: "hp", img: "https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" }
         ];
 
         const item = data[Math.floor(Math.random() * data.length)];
