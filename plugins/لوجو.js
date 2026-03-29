@@ -1,29 +1,24 @@
 async function handler(m, { conn }) {
     if (!global.gameActive) global.gameActive = {};
 
-    // حذف اللعبة القديمة
     if (global.gameActive[m.chat]) {
         clearTimeout(global.gameActive[m.chat].timeout);
         delete global.gameActive[m.chat];
     }
 
     try {
-        // تحميل الأسئلة من الرابط
         const res = await fetch('https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/لوجو.json');
         const data = await res.json();
 
         if (!Array.isArray(data)) return m.reply("❌ JSON غير صالح");
 
-        // اختيار سؤال عشوائي
         const item = data[Math.floor(Math.random() * data.length)];
 
-        // دعم كل الصيغ المحتملة
-        const image = item.img || item.image || item.logo || item.url;
-        const answer = (item.name || item.response || item.answer || "").toLowerCase().trim();
+        const image = item.img;
+        const answer = item.name.toLowerCase().trim();
 
         if (!image || !answer) return m.reply("❌ فيه مشكلة في ملف الأسئلة (القيم ناقصة)");
 
-        // ارسال السؤال
         const msg = await conn.sendMessage(m.chat, {
             image: { url: image },
             caption: `
@@ -63,7 +58,6 @@ async function handler(m, { conn }) {
     }
 }
 
-// التحقق من الإجابة
 handler.before = async (m, { conn }) => {
     if (!m.quoted || !m.text) return false;
 
