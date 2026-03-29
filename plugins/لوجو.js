@@ -9,6 +9,7 @@ async function handler(m, { conn }) {
         delete global.gameActive[m.chat];
     }
     
+    // رابط JSON الجديد للوجوهات
     const data = await (await fetch("https://raw.githubusercontent.com/zyad5yasser/bot-test/master/src/game/لوجو.json")).json();
     
     const app = data[Math.floor(Math.random() * data.length)];
