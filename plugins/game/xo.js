@@ -16,7 +16,7 @@ async function handler(m, { command, text, conn }) {
         return m.reply("🗑️ تم الحذف!");
     }
 
-    // 🤝 انضمام (تم إضافة منشن)
+    // 🤝 انضمام
     if (isJoin) {
         if (!game) return m.reply("❌ لا توجد لعبة!");
         if (game.status === 'playing') return m.reply("❌ بدأت!");
@@ -36,7 +36,7 @@ async function handler(m, { command, text, conn }) {
         return m.reply("❌ توجد لعبة شغالة");
     }
 
-    // 🎮 إنشاء (تم إضافة منشن)
+    // 🎮 إنشاء
     global.xoGames[m.chat] = {
         player1: m.sender,
         player2: null,
@@ -76,13 +76,14 @@ handler.before = async (m, { conn }) => {
     // 🏆 نهاية
     if (winner || game.board.every(x => x)) {
 
+        // 🔥 تعادل → مستوى ثاني
         if (!winner && game.size === 3) {
             game.size = 4;
             game.board = Array(16).fill(null);
             game.turn = 'X';
 
             return conn.sendMessage(m.chat, {
-                text: `🤝 تعادل!\n🔥 مستوى أصعب (4x4)\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} ضد @${game.player2.split('@')[0]}\n\n@${game.player1.split('@')[0]} يبدأ!`,
+                text: `🤝 تعادل!\n𖤍 مستوى أصعب (4x4)\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} ضد @${game.player2.split('@')[0]}\n\n@${game.player1.split('@')[0]} يبدأ!`,
                 mentions: [game.player1, game.player2]
             });
         }
@@ -111,7 +112,7 @@ handler.before = async (m, { conn }) => {
 handler.command = ['xo','اكس'];
 export default handler;
 
-// 🎨 رسم
+// 🎨 رسم اللوحة
 const drawBoard = (game) => {
     const { board, size } = game;
 
@@ -120,7 +121,7 @@ const drawBoard = (game) => {
         let row = board.slice(i, i + size).map((c, idx) => {
             if (c === 'X') return '❌';
             if (c === 'O') return '⭕';
-            if (size === 4) return `🔥${i + idx + 1}`;
+            if (size === 4) return `𖤍${i + idx + 1}`;
             return `${i + idx + 1}️⃣`;
         }).join(' | ');
 
@@ -129,18 +130,26 @@ const drawBoard = (game) => {
     return out;
 };
 
-// 🧠 فوز
+// 🧠 فحص الفوز (4 متتالية في المستوى الثاني)
 const checkWinner = (game) => {
     const { board, size } = game;
+
     const lines = [];
 
-    for (let i = 0; i < size; i++)
+    // صفوف
+    for (let i = 0; i < size; i++) {
         lines.push([...Array(size)].map((_, j) => i * size + j));
+    }
 
-    for (let i = 0; i < size; i++)
+    // أعمدة
+    for (let i = 0; i < size; i++) {
         lines.push([...Array(size)].map((_, j) => j * size + i));
+    }
 
+    // قطري ↘
     lines.push([...Array(size)].map((_, i) => i * (size + 1)));
+
+    // قطري ↙
     lines.push([...Array(size)].map((_, i) => (i + 1) * (size - 1)));
 
     for (const line of lines) {
