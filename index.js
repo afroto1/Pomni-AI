@@ -4,7 +4,7 @@ import { group, access } from "./system/control.js";
 /* =========== client ======== */
 
 const client = new Client({
-  phoneNumber: '84931450906', // bot number 
+  phoneNumber: '584264345739', // bot number 
   info: { 
    nameBot: "Pomni AI", 
    nameChannel: "𝐃𝐀𝐑𝐊 𝐋𝐎𝐑𝐃𝐒 𝐓𝐄𝐀𝐌  🇪🇬 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️", 
