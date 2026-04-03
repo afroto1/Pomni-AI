@@ -8,15 +8,15 @@ async function handler(m, { command, text, conn }) {
     const isDelete = cmd === 'delete' || cmd === 'حذف';
     const isJoin = cmd === 'join' || cmd === 'انضمام';
 
-    // 🗑️ حذف اللعبة
+    // 🗑️ حذف
     if (isDelete) {
-        if (!game) return m.reply("❌ لا توجد لعبة نشطة للحذف!");
-        if (game.player1 !== m.sender && game.player2 !== m.sender) return m.reply("❌ فقط اللاعبين يمكنهم حذف اللعبة!");
+        if (!game) return m.reply("❌ لا توجد لعبة!");
+        if (game.player1 !== m.sender && game.player2 !== m.sender) return m.reply("❌ فقط اللاعبين!");
         delete global.xoGames[m.chat];
-        return m.reply("🗑️ تم حذف اللعبة!");
+        return m.reply("🗑️ تم الحذف!");
     }
 
-    // 🤝 الانضمام
+    // 🤝 انضمام (تم إضافة منشن)
     if (isJoin) {
         if (!game) return m.reply("❌ لا توجد لعبة!");
         if (game.status === 'playing') return m.reply("❌ بدأت!");
@@ -27,32 +27,29 @@ async function handler(m, { command, text, conn }) {
         game.status = 'playing';
 
         return conn.sendMessage(m.chat, { 
-            text: `🎮 بدأت اللعبة!\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} (❌) ضد @${game.player2.split('@')[0]} (⭕)\n\n@${game.player1.split('@')[0]} يبدأ!`,
+            text: `🤝 انضم لاعب جديد!\n\n@${game.player2.split('@')[0]} دخل اللعبة\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} (❌) ضد @${game.player2.split('@')[0]} (⭕)\n\n@${game.player1.split('@')[0]} يبدأ!`,
             mentions: [game.player1, game.player2] 
         });
     }
 
     if (game) {
-        return m.reply(
-            game.status === 'waiting'
-                ? `❌ @${game.player1.split('@')[0]} ينتظر لاعب`
-                : "❌ توجد لعبة شغالة",
-            null,
-            game.status === 'waiting' ? { mentions: [game.player1] } : undefined
-        );
+        return m.reply("❌ توجد لعبة شغالة");
     }
 
-    // 🎮 إنشاء لعبة
+    // 🎮 إنشاء (تم إضافة منشن)
     global.xoGames[m.chat] = {
         player1: m.sender,
         player2: null,
         board: Array(9).fill(null),
-        size: 3, // 🧠 حجم اللوحة
+        size: 3,
         turn: 'X',
         status: 'waiting'
     };
 
-    return m.reply(`🎮 تم إنشاء لعبة XO\nاكتب *.xo join*`);
+    return conn.sendMessage(m.chat, {
+        text: `🎮 تم إنشاء لعبة XO!\n\n@${m.sender.split('@')[0]} بدأ اللعبة وينتظر لاعب...\n\nاكتب *.xo join* للانضمام!`,
+        mentions: [m.sender]
+    });
 }
 
 // 🎯 اللعب
@@ -79,15 +76,14 @@ handler.before = async (m, { conn }) => {
     // 🏆 نهاية
     if (winner || game.board.every(x => x)) {
 
-        // 🧠 حالة التعادل → مستوى أصعب
         if (!winner && game.size === 3) {
             game.size = 4;
             game.board = Array(16).fill(null);
             game.turn = 'X';
 
             return conn.sendMessage(m.chat, {
-                text: `🤝 تعادل!\n🔥 تم الانتقال إلى مستوى أصعب (4x4)\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} يبدأ!`,
-                mentions: [game.player1]
+                text: `🤝 تعادل!\n🔥 مستوى أصعب (4x4)\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} ضد @${game.player2.split('@')[0]}\n\n@${game.player1.split('@')[0]} يبدأ!`,
+                mentions: [game.player1, game.player2]
             });
         }
 
@@ -101,7 +97,6 @@ handler.before = async (m, { conn }) => {
         return true;
     }
 
-    // 🔄 تبديل
     game.turn = game.turn === 'X' ? 'O' : 'X';
     const next = game.turn === 'X' ? game.player1 : game.player2;
 
@@ -116,45 +111,35 @@ handler.before = async (m, { conn }) => {
 handler.command = ['xo','اكس'];
 export default handler;
 
-// 🎨 رسم اللوحة (مطور)
+// 🎨 رسم
 const drawBoard = (game) => {
     const { board, size } = game;
 
-    let result = '';
+    let out = '';
     for (let i = 0; i < board.length; i += size) {
         let row = board.slice(i, i + size).map((c, idx) => {
             if (c === 'X') return '❌';
             if (c === 'O') return '⭕';
-
-            // 🧠 مستوى ثاني
-            if (size === 4) return `🟨${i + idx + 1}`;
-            
+            if (size === 4) return `🔥${i + idx + 1}`;
             return `${i + idx + 1}️⃣`;
         }).join(' | ');
 
-        result += row + '\n';
+        out += row + '\n';
     }
-
-    return result;
+    return out;
 };
 
-// 🧠 فحص الفوز (يدعم 3x3 و 4x4)
+// 🧠 فوز
 const checkWinner = (game) => {
     const { board, size } = game;
-
     const lines = [];
 
-    // صفوف
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < size; i++)
         lines.push([...Array(size)].map((_, j) => i * size + j));
-    }
 
-    // أعمدة
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < size; i++)
         lines.push([...Array(size)].map((_, j) => j * size + i));
-    }
 
-    // أقطار
     lines.push([...Array(size)].map((_, i) => i * (size + 1)));
     lines.push([...Array(size)].map((_, i) => (i + 1) * (size - 1)));
 
