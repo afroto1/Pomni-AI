@@ -76,14 +76,14 @@ handler.before = async (m, { conn }) => {
     // 🏆 نهاية
     if (winner || game.board.every(x => x)) {
 
-        // 🔥 تعادل → مستوى ثاني
+        // 🔥 تعادل → مستوى ثاني (5x5)
         if (!winner && game.size === 3) {
-            game.size = 4;
-            game.board = Array(16).fill(null);
+            game.size = 5;
+            game.board = Array(25).fill(null);
             game.turn = 'X';
 
             return conn.sendMessage(m.chat, {
-                text: `🤝 تعادل!\n🎯 مستوى أصعب (4x4)\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} ضد @${game.player2.split('@')[0]}\n\n@${game.player1.split('@')[0]} يبدأ!`,
+                text: `🤝 تعادل!\n🎯 مستوى أصعب (5x5)\n🎯 الفوز = 4 متتالية\n\n${drawBoard(game)}\n\n@${game.player1.split('@')[0]} ضد @${game.player2.split('@')[0]}\n\n@${game.player1.split('@')[0]} يبدأ!`,
                 mentions: [game.player1, game.player2]
             });
         }
@@ -117,41 +117,61 @@ const drawBoard = (game) => {
     const { board, size } = game;
 
     let out = '';
+
     for (let i = 0; i < board.length; i += size) {
         let row = board.slice(i, i + size).map((c, idx) => {
             if (c === 'X') return '❌';
             if (c === 'O') return '⭕';
 
-            // 🎯 المستوى الثاني → أرقام فقط
-            if (size === 4) return `${i + idx + 1}`;
-
-            // المستوى الأول كما هو
+            if (size === 5) return '၍'; // المستوى الثاني
             return `${i + idx + 1}️⃣`;
         }).join(' | ');
 
         out += row + '\n';
     }
+
+    // ✍️ العبارة
+    out += '\n(عد المربعات و اكتب صح)';
+
     return out;
 };
 
-// 🧠 فحص الفوز
+// 🧠 فحص الفوز (4 متتالية في 5x5)
 const checkWinner = (game) => {
     const { board, size } = game;
 
-    const lines = [];
+    const need = size === 5 ? 4 : size;
 
-    for (let i = 0; i < size; i++)
-        lines.push([...Array(size)].map((_, j) => i * size + j));
+    const directions = [
+        [1, 0],
+        [0, 1],
+        [1, 1],
+        [1, -1]
+    ];
 
-    for (let i = 0; i < size; i++)
-        lines.push([...Array(size)].map((_, j) => j * size + i));
+    for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+            const start = y * size + x;
+            const player = board[start];
+            if (!player) continue;
 
-    lines.push([...Array(size)].map((_, i) => i * (size + 1)));
-    lines.push([...Array(size)].map((_, i) => (i + 1) * (size - 1)));
+            for (const [dx, dy] of directions) {
+                let count = 1;
 
-    for (const line of lines) {
-        const first = board[line[0]];
-        if (first && line.every(i => board[i] === first)) return first;
+                for (let k = 1; k < need; k++) {
+                    const nx = x + dx * k;
+                    const ny = y + dy * k;
+
+                    if (nx < 0 || ny < 0 || nx >= size || ny >= size) break;
+
+                    const idx = ny * size + nx;
+                    if (board[idx] === player) count++;
+                    else break;
+                }
+
+                if (count === need) return player;
+            }
+        }
     }
 
     return null;
