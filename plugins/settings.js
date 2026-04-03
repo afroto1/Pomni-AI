@@ -96,7 +96,7 @@ async function handler(m, { conn, command, args }) {
             return '*✅ ~ تم فك وضع الخاص للمطور*\n> *_البوت سيكلم الجميع_*';
         },
 
-        // 🔥 الميزة الجديدة
+        // 🔥 مضاد الروابط
         'مضاد_لينكات': () => {
             if (!m.isOwner && !m.isAdmin) return '*❌ ~ هذا الأمر للمشرفين فقط*';
             db.settings[chatId].antiLinks = true;
@@ -127,16 +127,23 @@ async function handler(m, { conn, command, args }) {
 handler.before = async (m, { conn }) => {
     if (!global.database) global.database = loadDB();
 
-    const db = global.database 
-    const settings = db.settings?.[m.chat] || {}
+    const db = global.database;
+    const settings = db.settings?.[m.chat] || {};
 
     if (settings.adminOnly && !m.isOwner && !m.isAdmin) return true;
     if (db.developerPrivate && !m.isOwner && !m.isGroup) return true;
     if (db.ban && !m.isOwner && db.ban[m.sender]) return true;
 
-    // 🔥 مضاد الروابط
+    // 🔥 مضاد الروابط (نسخة قوية)
     if (settings.antiLinks && m.isGroup && !m.isAdmin && !m.isOwner) {
-        const text = m.text || '';
+
+        const text = (
+            m.text ||
+            m.message?.conversation ||
+            m.message?.extendedTextMessage?.text ||
+            ''
+        );
+
         const linkRegex = /(https?:\/\/|www\.|chat\.whatsapp\.com|t\.me|discord\.gg)/i;
 
         if (linkRegex.test(text)) {
@@ -144,7 +151,7 @@ handler.before = async (m, { conn }) => {
                 await conn.sendMessage(m.chat, { delete: m.key });
                 await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove');
             } catch (e) {
-                console.log(e);
+                console.log('ANTI LINK ERROR:', e);
             }
         }
     }
