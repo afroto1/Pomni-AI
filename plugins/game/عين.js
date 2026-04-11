@@ -75,7 +75,6 @@ handler.before = async (m, { conn }) => {
 
     const userAnswer = m.text.toLowerCase().trim();
 
-    // انسحاب
     if (userAnswer === 'انسحاب') {
         clearTimeout(game.timeout);
         delete global.gameActive[m.chat];
@@ -90,7 +89,6 @@ handler.before = async (m, { conn }) => {
         return true;
     }
 
-    // إجابة صحيحة
     if (userAnswer === game.answer) {
         clearTimeout(game.timeout);
         delete global.gameActive[m.chat];
@@ -115,7 +113,13 @@ handler.before = async (m, { conn }) => {
 };
 
 handler.help = ['عين'];
-handler.tags = ['game'];
+
+// 👇 التعديل هنا
+handler.category = 'games'
+
+// 👇 مهم لظهور الأمر
+handler.usage = ['عين']
+
 handler.command = /^(عين)$/i;
 
 export default handler;
