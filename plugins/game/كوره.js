@@ -95,7 +95,13 @@ handler.before = async (m, { conn }) => {
 };
 
 handler.help = ['كوره'];
-handler.tags = ['game'];
+
+// 👇 التعديل هنا فقط
+handler.category = 'games'
+
+// 👇 مهم لظهور الأمر في القائمة
+handler.usage = ['كوره']
+
 handler.command = /^(كوره)$/i;
 
 export default handler;
