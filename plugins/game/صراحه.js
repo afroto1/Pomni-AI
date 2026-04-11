@@ -2,16 +2,21 @@ let handler = async (m) => {
     m.reply(`*𓅓 ⋅ ───━ •﹝👑﹞• ━─── ⋅ 𓅓*\n➢ *"${pickRandom(global.bjssvjs)}"*\n*𓅓 ⋅ ───━ •﹝👑﹞• ━─── ⋅ 𓅓*`)
 }
 
-handler.tags = ['fun']
+// 👇 التعديل هنا
+handler.category = 'games'
+
+// 👇 مهم لظهور الأمر
+handler.usage = ['صراحه']
+
 handler.command = ['صراحه','صراحة','الصراحه']
 
 export default handler
 
 function pickRandom(list) {
-    return list[Math.floor(Math.random() * list.length)]
+    return list[Math.floor(list.length * Math.random())]
 }
 
-// قائمة الأسئلة بصيغة "‏صراحه  | السؤال"
+// القائمة كما هي بدون أي تغيير
 global.bjssvjs = [
   "‏صراحه  | 💑 هل إتي؟",
   "‏صراحه  | 😔 عمرك ارتبطت بحد وندمت؟",
