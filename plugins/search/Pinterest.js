@@ -32,8 +32,8 @@ async function test(m, { conn, bot, text }) {
       cards: cards,
       mentions: [m.sender],
       newsletter: {
-      name: '𝐕𝐈𝐈7 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️',
-      jid: '120363225356834044@newsletter'
+      name: '𝐓𝐄𝐀𝐌 𝐵𝛩𝑇 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 𝐁𝐋𝐀𝐂𝐊 🇪🇬 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️',
+      jid: '120363291329944922@newsletter'
     },
     }, m);
     
