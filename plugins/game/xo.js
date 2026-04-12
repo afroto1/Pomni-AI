@@ -76,6 +76,7 @@ handler.before = async (m, { conn }) => {
     // 🏆 نهاية
     if (winner || game.board.every(x => x)) {
 
+        // 🔥 تعادل → مستوى ثاني
         if (!winner && game.size === 3) {
             game.size = 5;
             game.board = Array(25).fill(null);
@@ -113,31 +114,59 @@ handler.usage = ['xo','اكس']
 handler.command = ['xo','اكس'];
 export default handler;
 
-// 🎨 رسم اللوحة (تم التعديل هنا)
+// 🎨 رسم اللوحة
 const drawBoard = (game) => {
     const { board, size } = game;
 
     let out = '';
 
-    for (let i = 0; i < board.length; i += size) {
-        let row = board.slice(i, i + size).map((c, idx) => {
+    // 📏 توسيط
+    const center = (txt, width = 3) => {
+        txt = String(txt);
+        let space = width - txt.length;
+        let left = Math.floor(space / 2);
+        let right = space - left;
+        return ' '.repeat(left) + txt + ' '.repeat(right);
+    };
 
-            // ✅ المستوى الثاني (مزخرف)
-            if (size === 5) {
-                if (c === 'X') return '𝙓';
-                if (c === 'O') return '𝙊';
-                return '၍';
-            }
+    // 🟢 المستوى الأول (بدون تغيير)
+    if (size === 3) {
+        for (let i = 0; i < board.length; i += size) {
+            let row = board.slice(i, i + size).map((c, idx) => {
+                if (c === 'X') return '❌';
+                if (c === 'O') return '⭕';
+                return `${i + idx + 1}️⃣`;
+            }).join(' | ');
 
-            // ✅ المستوى الأول (عادي)
-            if (c === 'X') return '❌';
-            if (c === 'O') return '⭕';
+            out += row + '\n';
+        }
 
-            return `${i + idx + 1}️⃣`;
+        out += '\n(عد المربعات و اكتب صح)';
+        return out;
+    }
 
-        }).join(' | ');
+    // 🔥 المستوى الثاني (مربعات)
+    const getCell = (c) => {
+        if (c === 'X') return '𝕏';
+        if (c === 'O') return '𝕆';
+        return ' ';
+    };
 
-        out += row + '\n';
+    for (let y = 0; y < size; y++) {
+
+        // 🔝 أعلى
+        out += '┌───┐'.repeat(size) + '\n';
+
+        // 🎯 الوسط
+        let middle = '';
+        for (let x = 0; x < size; x++) {
+            let i = y * size + x;
+            middle += '│' + center(getCell(board[i])) + '│';
+        }
+        out += middle + '\n';
+
+        // 🔻 أسفل
+        out += '└───┘'.repeat(size) + '\n';
     }
 
     out += '\n(عد المربعات و اكتب صح)';
