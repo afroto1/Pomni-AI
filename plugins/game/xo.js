@@ -114,59 +114,31 @@ handler.usage = ['xo','اكس']
 handler.command = ['xo','اكس'];
 export default handler;
 
-// 🎨 رسم اللوحة
+// 🎨 رسم اللوحة (نهائي)
 const drawBoard = (game) => {
     const { board, size } = game;
 
     let out = '';
 
-    // 📏 توسيط
-    const center = (txt, width = 3) => {
-        txt = String(txt);
-        let space = width - txt.length;
-        let left = Math.floor(space / 2);
-        let right = space - left;
-        return ' '.repeat(left) + txt + ' '.repeat(right);
-    };
+    for (let i = 0; i < board.length; i += size) {
+        let row = board.slice(i, i + size).map((c, idx) => {
 
-    // 🟢 المستوى الأول (بدون تغيير)
-    if (size === 3) {
-        for (let i = 0; i < board.length; i += size) {
-            let row = board.slice(i, i + size).map((c, idx) => {
-                if (c === 'X') return '❌';
-                if (c === 'O') return '⭕';
-                return `${i + idx + 1}️⃣`;
-            }).join(' | ');
+            // 🔥 المستوى الثاني (زخرفة فقط)
+            if (size === 5) {
+                if (c === 'X') return '𝕏';
+                if (c === 'O') return '𝕆';
+                return '၍';
+            }
 
-            out += row + '\n';
-        }
+            // 🟢 المستوى الأول
+            if (c === 'X') return '❌';
+            if (c === 'O') return '⭕';
 
-        out += '\n(عد المربعات و اكتب صح)';
-        return out;
-    }
+            return `${i + idx + 1}️⃣`;
 
-    // 🔥 المستوى الثاني (مربعات)
-    const getCell = (c) => {
-        if (c === 'X') return '𝕏';
-        if (c === 'O') return '𝕆';
-        return ' ';
-    };
+        }).join(' | ');
 
-    for (let y = 0; y < size; y++) {
-
-        // 🔝 أعلى
-        out += '┌───┐'.repeat(size) + '\n';
-
-        // 🎯 الوسط
-        let middle = '';
-        for (let x = 0; x < size; x++) {
-            let i = y * size + x;
-            middle += '│' + center(getCell(board[i])) + '│';
-        }
-        out += middle + '\n';
-
-        // 🔻 أسفل
-        out += '└───┘'.repeat(size) + '\n';
+        out += row + '\n';
     }
 
     out += '\n(عد المربعات و اكتب صح)';
