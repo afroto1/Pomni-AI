@@ -1,9 +1,11 @@
 let handler = async (m, { conn, text }) => {
-  if (!text) throw '*أدخــل الـسـؤال !*'
+  // لو كتب "هل" فقط
+  if (!text) {
+    return m.reply('*أدخــل الـسـؤال !*')
+  }
 
   let sender = m.sender
 
-  // اختيار عشوائي مباشرة بدون دالة خارجية
   let answers = [
     'احــتـمـال قـلـيـل',
     'نــعم بـالـتـأكـيد',
@@ -14,8 +16,6 @@ let handler = async (m, { conn, text }) => {
   ]
 
   let answer = answers[Math.floor(Math.random() * answers.length)]
-
-  // نسبة مئوية
   let percent = Math.floor(Math.random() * 101)
 
   let msg = `*هــل ${text}*\n\n*الــأجــابـه :* ${answer}\n*الـنـسـبـة :* ${percent}%`
@@ -29,5 +29,9 @@ let handler = async (m, { conn, text }) => {
 handler.command = /^هل$/i
 handler.group = true
 handler.tags = ['fun']
+
+// 👇 الإضافة فقط بدون تغيير الكود
+handler.category = 'games'
+handler.usage = ['هل']
 
 export default handler
