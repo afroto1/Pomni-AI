@@ -109,70 +109,9 @@ handler.before = async (m, { conn }) => {
     return true;
 };
 
+// 👇 الإضافة فقط
+handler.category = 'games'
+handler.usage = ['xo','اكس']
+
 handler.command = ['xo','اكس'];
 export default handler;
-
-// 🎨 رسم اللوحة
-const drawBoard = (game) => {
-    const { board, size } = game;
-
-    let out = '';
-
-    for (let i = 0; i < board.length; i += size) {
-        let row = board.slice(i, i + size).map((c, idx) => {
-            if (c === 'X') return '❌';
-            if (c === 'O') return '⭕';
-
-            if (size === 5) return '၍'; // المستوى الثاني
-            return `${i + idx + 1}️⃣`;
-        }).join(' | ');
-
-        out += row + '\n';
-    }
-
-    // ✍️ العبارة
-    out += '\n(عد المربعات و اكتب صح)';
-
-    return out;
-};
-
-// 🧠 فحص الفوز (4 متتالية في 5x5)
-const checkWinner = (game) => {
-    const { board, size } = game;
-
-    const need = size === 5 ? 4 : size;
-
-    const directions = [
-        [1, 0],
-        [0, 1],
-        [1, 1],
-        [1, -1]
-    ];
-
-    for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
-            const start = y * size + x;
-            const player = board[start];
-            if (!player) continue;
-
-            for (const [dx, dy] of directions) {
-                let count = 1;
-
-                for (let k = 1; k < need; k++) {
-                    const nx = x + dx * k;
-                    const ny = y + dy * k;
-
-                    if (nx < 0 || ny < 0 || nx >= size || ny >= size) break;
-
-                    const idx = ny * size + nx;
-                    if (board[idx] === player) count++;
-                    else break;
-                }
-
-                if (count === need) return player;
-            }
-        }
-    }
-
-    return null;
-};
