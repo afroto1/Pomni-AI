@@ -76,7 +76,6 @@ handler.before = async (m, { conn }) => {
     // 🏆 نهاية
     if (winner || game.board.every(x => x)) {
 
-        // 🔥 تعادل → مستوى ثاني (5x5)
         if (!winner && game.size === 3) {
             game.size = 5;
             game.board = Array(25).fill(null);
@@ -109,14 +108,12 @@ handler.before = async (m, { conn }) => {
     return true;
 };
 
-// 👇 الإضافة هنا فقط
 handler.category = 'games'
 handler.usage = ['xo','اكس']
-
 handler.command = ['xo','اكس'];
 export default handler;
 
-// 🎨 رسم اللوحة
+// 🎨 رسم اللوحة (تم التعديل هنا)
 const drawBoard = (game) => {
     const { board, size } = game;
 
@@ -124,18 +121,26 @@ const drawBoard = (game) => {
 
     for (let i = 0; i < board.length; i += size) {
         let row = board.slice(i, i + size).map((c, idx) => {
+
+            // ✅ المستوى الثاني (مزخرف)
+            if (size === 5) {
+                if (c === 'X') return '𝙓';
+                if (c === 'O') return '𝙊';
+                return '၍';
+            }
+
+            // ✅ المستوى الأول (عادي)
             if (c === 'X') return '❌';
             if (c === 'O') return '⭕';
 
-            if (size === 5) return '၍';
             return `${i + idx + 1}️⃣`;
+
         }).join(' | ');
 
         out += row + '\n';
     }
 
     out += '\n(عد المربعات و اكتب صح)';
-
     return out;
 };
 
