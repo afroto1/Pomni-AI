@@ -1,4 +1,4 @@
-import { import { Client } from 'meowsab';
+import { Client } from 'meowsab';
 import { group, access } from "./system/control.js";
 import UltraDB from "./system/UltraDB.js";
 import sub from './sub.js';
@@ -9,14 +9,14 @@ const client = new Client({
   prefix: [".", "/", "!"],
   fromMe: false,
   owners: [
-  // Owner 1
+    // Owner 1
     { name: "AFROTO", lid: "247579682029763@lid", jid: "201067999523@s.whatsapp.net" },
-  // Owner 2
+    // Owner 2
     { name: "KING BLACK 👑", lid: "77039247822892@lid", jid: "994407941269@s.whatsapp.net" },
-  // Owner 3
+    // Owner 3
     { name: "كارثه بيه", jid: "212776030802@s.whatsapp.net", lid: "3775964147906@lid" },
-  // Owner 4 
-   { name: "عفرتو الدجال 🌚", jid: "61488826998@s.whatsapp.net", lid: "121634144935975@lid" }
+    // Owner 4 
+    { name: "عفرتو الدجال 🌚", jid: "61488826998@s.whatsapp.net", lid: "121634144935975@lid" }
   ],
   commandsPath: './plugins'
 });
@@ -26,11 +26,12 @@ client.onCommandAccess(access);
 
 /* =========== Database ========== */
 if (!global.db) {
-    global.db = new UltraDB();
+  global.db = new UltraDB();
 }
 
 /* =========== Config ========== */
 const { config } = client;
+
 config.info = { 
   nameBot: "♡ 𝙋𝙊𝙉𝙈𝙄 🎪 〈", 
   nameChannel: "𝐵𝛩𝑇 𝐖𝐇𝐀𝐓𝐒𝐀𝐏𝐏 𝐁𝐋𝐀𝐂𝐊 🇪🇬 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️", 
@@ -54,8 +55,9 @@ config.info = {
 /* =========== Start ========== */
 client.start();
 
+/* =========== Load Sub System ========== */
 setTimeout(async () => {
-if (client.commandSystem) { 
-sub(client)
+  if (client.commandSystem) { 
+    sub(client);
   }
 }, 2000);
