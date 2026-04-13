@@ -1,82 +1,45 @@
 import fs from 'fs';
 import path from 'path';
 
-const ff = async (m, { conn, command }) => {
-    try {
-        // 🔥 تأكيد إن الأمر اشتغل
-        console.log("Command received:", command);
-
-        const filePath = path.join(process.cwd(), 'settings', 'database.json');
-
-        if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, JSON.stringify({ ban: {} }, null, 2));
-        }
-
-        const data = fs.readFileSync(filePath, 'utf8');
-        const database1 = JSON.parse(data);
-
-        if (!database1.ban) database1.ban = {};
-        if (!global.database) global.database = {};
-        if (!global.database.ban) global.database.ban = {};
-
-        // 🎯 الهدف (لازم ريبلاي)
-        let target = m.quoted?.sender;
-
-        // ❌ بدون ريبلاي
-        if (!target) {
-            return m.reply("❌ رد على الشخص اللى عاوز تحظرو من استخدام البوت");
-        }
-
-        // ================= فك =================
-        if (command === "فك") {
-            if (database1.ban[target]) {
-                delete database1.ban[target];
-                delete global.database.ban[target];
-
-                fs.writeFileSync(filePath, JSON.stringify(database1, null, 2));
-
-                return conn.sendMessage(
-                    m.chat,
-                    {
-                        text: `✅ تم فك حظر @${target.split('@')[0]}`,
-                        mentions: [target]
-                    },
-                    { quoted: m }
-                );
-            } else {
-                return m.reply("❌ هذا المستخدم ليس محظور");
-            }
-        }
-
-        // ================= حظر =================
-        if (command === "حظر") {
-            if (database1.ban[target]) {
-                return m.reply("❌ المستخدم بالفعل محظور");
-            }
-
-            database1.ban[target] = true;
-            global.database.ban[target] = true;
-
-            fs.writeFileSync(filePath, JSON.stringify(database1, null, 2));
-
-            return conn.sendMessage(
-                m.chat,
-                {
-                    text: `✅ تم حظر المستخدم @${target.split('@')[0]}`,
-                    mentions: [target]
-                },
-                { quoted: m }
-            );
-        }
-
-    } catch (e) {
-        console.log("ERROR:", e);
-        m.reply("❌ حصل خطأ في الكود");
+const ff = async (m, { conn, text, command }) => {
+    let target = m.mentionedJid?.[0] || m.quoted?.sender;
+    
+    if (!target && text?.includes('@')) {
+        target = text.replace('@', '') + '@s.whatsapp.net';
     }
+    
+    if (!target) {
+        return m.reply(`*~ 💙 منشن شخص مثل /${command} @${m.sender.split('@')[0]} ❤️ ~*`);
+    }
+    
+    const jid = await m.lid2jid(target);
+    const user = global.db.users[jid] || {};
+    
+    const isUnban = command === "فك_حظر" || command === "الغاء_الحظر";
+    
+    if (isUnban) {
+        if (user.banned) {
+            delete user.banned;
+            await conn.sendMessage(m.chat, { 
+                text: `*✅ ~تم فك حظر @${target.split('@')[0]}*\n> *_دلوقت يقدر يكلم البوت عادي_*`, 
+                mentions: [target] 
+            });
+        } else {
+            m.reply(`*❌ ~هذا المستخدم ليس محظوراً*`);
+        }
+        return;
+    }
+    
+    user.banned = true;
+    await conn.sendMessage(m.chat, { 
+        text: `*✅ ~تم حظر @${target.split('@')[0]}*\n> *_مش هيعرف يكلم البوت تاني_*`, 
+        mentions: [target] 
+    });
 };
 
-ff.command = ['حظر', 'فك']; // مهم جدا
-ff.category = 'owner';
+ff.usage = ["حظر", "فك_حظر"];
+ff.category = "owner";
+ff.command = ["حظر", "فك_حظر", "الغاء_الحظر"];
 ff.owner = true;
 
 export default ff;
