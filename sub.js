@@ -41,7 +41,7 @@ async function sub(client) {
     try {
       if (body === "تست") {
         await sock.sendMessage(msg.key.remoteJid, {
-          text: "🤖 SubBots ~ VII7"
+          text: "🤖 SubBots ~ AFROTO"
         });
       }
 
