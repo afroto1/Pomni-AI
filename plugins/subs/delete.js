@@ -3,7 +3,7 @@ const run = async (m, { args, conn, bot }) => {
   if (!sub) return m.reply("❌ نظام البوتات الفرعية غير متاح");
 
   if (!args[0]) {
-    return m.reply(`📝 حذف بوت\n\nمثال:\n${bot.config.prefix[0]}حذف_بوت 1\n${bot.config.prefix[0]}حذف_بوت 201234567890`);
+    return m.reply(`📝 حذف بوت\n\nمثال:\n${bot.config.prefix[0]}حذف_بوت 1\n${bot.config.prefix[0]}حذف_بوت 201067999523`);
   }
 
   const input = args[0];
