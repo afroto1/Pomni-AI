@@ -1,4 +1,4 @@
-let handler = async (m, { conn, participants, isOwner, isROwner, isAdmin, command }) => {
+let handler = async (m, { isOwner, isROwner, isAdmin, command }) => {
     try {
         // إنشاء قاعدة البيانات
         global.db ||= {};
@@ -8,16 +8,20 @@ let handler = async (m, { conn, participants, isOwner, isROwner, isAdmin, comman
 
         let chat = global.db.data.chats[m.chat];
 
-        // ================= منع الأوامر فعلياً =================
-        // إذا المجموعة محظورة وأي عضو عادي كتب أمر
+        // ================= حظر فعلي لكل الأوامر =================
+        // إذا الجروب محظور، يمنع أي أمر يبدأ بنقطة
         if (
+            m.isGroup &&
             chat.banned &&
+            m.text &&
+            m.text.startsWith(".") &&
+            !["فك_جروب"].includes(command) &&
             !isOwner &&
             !isROwner &&
-            !isAdmin &&
-            command !== "فك_جروب"
+            !isAdmin
         ) {
-            return m.reply("🚫 هذه المجموعة محظورة من استخدام البوت");
+            await m.reply("🚫 هذه المجموعة محظورة من استخدام البوت");
+            return true; // يوقف باقي الإضافات نهائياً
         }
 
         // ================= أمر الحظر =================
@@ -27,21 +31,7 @@ let handler = async (m, { conn, participants, isOwner, isROwner, isAdmin, comman
             }
 
             chat.banned = true;
-
-            let sender = m.sender;
-
-            // لو مشرف عادي يستخدم الأمر ينزل باقي المشرفين
-            if (isAdmin && !isOwner && !isROwner) {
-                let admins = participants
-                    .filter(v => v.admin && v.id !== sender)
-                    .map(v => v.id);
-
-                if (admins.length) {
-                    await conn.groupParticipantsUpdate(m.chat, admins, "demote");
-                }
-            }
-
-            return m.reply("🚫 تم حظر المجموعة من استخدام البوت");
+            return m.reply("🚫 تم حظر المجموعة فعلياً من استخدام البوت");
         }
 
         // ================= فك الحظر =================
@@ -63,7 +53,6 @@ handler.help = ["حظر_جروب", "فك_جروب"];
 handler.tags = ["group"];
 handler.command = ["حظر_جروب", "فك_جروب"];
 handler.group = true;
-handler.botAdmin = true;
-handler.before = true; // مهم جداً لتفعيل المنع قبل تنفيذ الأوامر
+handler.before = true; // مهم جداً
 
 export default handler;
