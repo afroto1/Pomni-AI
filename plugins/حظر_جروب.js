@@ -1,23 +1,36 @@
 let handler = async (m, { conn, participants, isOwner, isROwner, isAdmin, command }) => {
     try {
-        // صلاحيات الاستخدام
-        if (!isOwner && !isROwner && !isAdmin) {
-            return m.reply("❌ هذا الأمر للمطور أو المشرفين فقط");
-        }
-
-        // إنشاء قاعدة البيانات إذا غير موجودة
+        // إنشاء قاعدة البيانات
         global.db ||= {};
         global.db.data ||= {};
         global.db.data.chats ||= {};
         global.db.data.chats[m.chat] ||= {};
 
-        // ================= حظر الجروب =================
+        let chat = global.db.data.chats[m.chat];
+
+        // ================= منع الأوامر فعلياً =================
+        // إذا المجموعة محظورة وأي عضو عادي كتب أمر
+        if (
+            chat.banned &&
+            !isOwner &&
+            !isROwner &&
+            !isAdmin &&
+            command !== "فك_جروب"
+        ) {
+            return m.reply("🚫 هذه المجموعة محظورة من استخدام البوت");
+        }
+
+        // ================= أمر الحظر =================
         if (command === "حظر_جروب") {
-            global.db.data.chats[m.chat].banned = true;
+            if (!isOwner && !isROwner && !isAdmin) {
+                return m.reply("❌ هذا الأمر للمطور أو المشرفين فقط");
+            }
+
+            chat.banned = true;
 
             let sender = m.sender;
 
-            // إذا المنفذ مشرف فقط وليس مطور
+            // لو مشرف عادي يستخدم الأمر ينزل باقي المشرفين
             if (isAdmin && !isOwner && !isROwner) {
                 let admins = participants
                     .filter(v => v.admin && v.id !== sender)
@@ -28,13 +41,17 @@ let handler = async (m, { conn, participants, isOwner, isROwner, isAdmin, comman
                 }
             }
 
-            return m.reply("🚫 تم حظر المجموعة من استخدام البوت\n\nاكتب:\n.فك_جروب");
+            return m.reply("🚫 تم حظر المجموعة من استخدام البوت");
         }
 
         // ================= فك الحظر =================
         if (command === "فك_جروب") {
-            global.db.data.chats[m.chat].banned = false;
-            return m.reply("✅ تم فك حظر المجموعة بنجاح");
+            if (!isOwner && !isROwner && !isAdmin) {
+                return m.reply("❌ هذا الأمر للمطور أو المشرفين فقط");
+            }
+
+            chat.banned = false;
+            return m.reply("✅ تم فك حظر المجموعة");
         }
 
     } catch (e) {
@@ -47,5 +64,6 @@ handler.tags = ["group"];
 handler.command = ["حظر_جروب", "فك_جروب"];
 handler.group = true;
 handler.botAdmin = true;
+handler.before = true; // مهم جداً لتفعيل المنع قبل تنفيذ الأوامر
 
 export default handler;
